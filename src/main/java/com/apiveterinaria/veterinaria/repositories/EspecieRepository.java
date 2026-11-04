@@ -1,0 +1,17 @@
+package com.apiveterinaria.veterinaria.repositories;
+
+import com.apiveterinaria.veterinaria.models.Especie;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+@Repository
+public interface EspecieRepository extends JpaRepository<Especie, UUID> {
+
+    Optional<Especie> findByCodigo(String codigo);
+
+    List<Especie> findAllByOrderByNombreAsc();
+}
