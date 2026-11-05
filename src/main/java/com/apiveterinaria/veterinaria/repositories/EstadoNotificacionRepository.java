@@ -14,4 +14,8 @@ public interface EstadoNotificacionRepository extends JpaRepository<EstadoNotifi
     Optional<EstadoNotificacion> findByCodigo(String codigo);
 
     List<EstadoNotificacion> findAllByOrderByNombreAsc();
+
+    boolean existsByNombreIgnoreCase(String nombre);
+
+    boolean existsByCodigoIgnoreCase(String codigo);
 }

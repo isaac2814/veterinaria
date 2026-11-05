@@ -14,4 +14,8 @@ public interface RolRepository extends JpaRepository<Rol, UUID> {
     Optional<Rol> findByCodigo(String codigo);
 
     List<Rol> findAllByOrderByNombreAsc();
+
+    boolean existsByNombreIgnoreCase(String nombre);
+
+    boolean existsByCodigoIgnoreCase(String codigo);
 }
