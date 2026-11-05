@@ -10,6 +10,7 @@ import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -49,4 +50,8 @@ public interface MovimientoInventarioRepository extends Repository<MovimientoInv
     @EntityGraph(attributePaths = {"lote", "lote.vacuna", "usuario"})
     @Query("SELECT m FROM MovimientoInventario m WHERE m.lote.id = :loteId")
     Page<MovimientoInventario> findByLoteId(@Param("loteId") UUID loteId, Pageable pageable);
+
+    @EntityGraph(attributePaths = {"lote", "lote.vacuna", "usuario"})
+    @Query("SELECT m FROM MovimientoInventario m WHERE m.registroVacunacionId = :registroVacunacionId ORDER BY m.fechaMovimiento ASC")
+    List<MovimientoInventario> findByRegistroVacunacionId(@Param("registroVacunacionId") UUID registroVacunacionId);
 }

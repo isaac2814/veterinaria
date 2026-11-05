@@ -1,9 +1,11 @@
 package com.apiveterinaria.veterinaria.controllers;
 
 import com.apiveterinaria.veterinaria.dto.ActualizarMascotaRequest;
+import com.apiveterinaria.veterinaria.dto.CarnetVacunacionResponse;
 import com.apiveterinaria.veterinaria.dto.CrearMascotaRequest;
 import com.apiveterinaria.veterinaria.dto.MascotaResponse;
 import com.apiveterinaria.veterinaria.enums.EstadoMascota;
+import com.apiveterinaria.veterinaria.services.CarnetService;
 import com.apiveterinaria.veterinaria.services.MascotaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -24,9 +26,11 @@ import java.util.UUID;
 public class MascotaController {
 
     private final MascotaService mascotaService;
+    private final CarnetService carnetService;
 
-    public MascotaController(MascotaService mascotaService) {
+    public MascotaController(MascotaService mascotaService, CarnetService carnetService) {
         this.mascotaService = mascotaService;
+        this.carnetService = carnetService;
     }
 
     @PostMapping
@@ -63,6 +67,17 @@ public class MascotaController {
     @ApiResponse(responseCode = "404", description = "Mascota no encontrada")
     public ResponseEntity<MascotaResponse> obtenerPorId(@PathVariable UUID id) {
         return ResponseEntity.ok(mascotaService.obtenerPorId(id));
+    }
+
+    @GetMapping("/{id}/carnet")
+    @Operation(summary = "Obtener el carnet de vacunación completo de una mascota")
+    @ApiResponse(responseCode = "200", description = "Carnet de vacunación obtenido exitosamente")
+    @ApiResponse(responseCode = "404", description = "Mascota no encontrada")
+    public ResponseEntity<CarnetVacunacionResponse> obtenerCarnet(
+            @PathVariable UUID id,
+            @RequestParam(defaultValue = "false") boolean incluirAnuladas
+    ) {
+        return ResponseEntity.ok(carnetService.obtenerCarnet(id, incluirAnuladas));
     }
 
     @PutMapping("/{id}")
