@@ -100,4 +100,13 @@ public class UsuarioController {
         usuarioService.cambiarPassword(id, request.passwordNueva());
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar un usuario")
+    @ApiResponse(responseCode = "204", description = "Usuario eliminado exitosamente")
+    @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
+    public ResponseEntity<Void> eliminar(@PathVariable UUID id) {
+        usuarioService.eliminar(id);
+        return ResponseEntity.noContent().build();
+    }
 }

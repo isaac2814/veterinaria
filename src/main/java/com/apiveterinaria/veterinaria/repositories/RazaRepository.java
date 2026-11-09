@@ -22,4 +22,10 @@ public interface RazaRepository extends JpaRepository<Raza, UUID> {
     Optional<Raza> findWithEspecieById(UUID id);
 
     boolean existsByEspecieIdAndNombreIgnoreCase(UUID especieId, String nombre);
+
+    boolean existsByEspecieIdAndNombreIgnoreCaseAndIdNot(UUID especieId, String nombre, UUID id);
+
+    boolean existsByEspecieId(UUID especieId);
+
+    Optional<Raza> findByEspecieIdAndNombreIgnoreCase(UUID especieId, String nombre);
 }

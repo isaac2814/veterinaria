@@ -2,6 +2,7 @@ package com.apiveterinaria.veterinaria.services;
 
 import com.apiveterinaria.veterinaria.config.ContextoAuditoria;
 import com.apiveterinaria.veterinaria.config.PaginacionUtil;
+import com.apiveterinaria.veterinaria.dto.ActualizarMovimientoRequest;
 import com.apiveterinaria.veterinaria.dto.CrearMovimientoRequest;
 import com.apiveterinaria.veterinaria.dto.MovimientoResponse;
 import com.apiveterinaria.veterinaria.enums.TipoMovimiento;
@@ -139,5 +140,29 @@ public class MovimientoInventarioService {
         Pageable ordenado = PaginacionUtil.validarOrden(pageable, CAMPOS_ORDEN_PERMITIDOS, "fechaMovimiento");
         return movimientoRepository.findByLoteId(loteId, ordenado)
                 .map(MovimientoResponse::from);
+    }
+
+    @Transactional
+    public MovimientoResponse actualizar(UUID id, ActualizarMovimientoRequest request) {
+        contextoAuditoria.aplicar();
+
+        MovimientoInventario movimiento = movimientoRepository.findById(id)
+                .orElseThrow(() -> new RecursoNoEncontradoException("Movimiento no encontrado con ID: " + id));
+
+        movimiento.setObservaciones(request.observaciones().trim());
+        movimiento = movimientoRepository.saveAndFlush(movimiento);
+
+        return MovimientoResponse.from(movimiento);
+    }
+
+    @Transactional
+    public void eliminar(UUID id) {
+        contextoAuditoria.aplicar();
+
+        MovimientoInventario movimiento = movimientoRepository.findById(id)
+                .orElseThrow(() -> new RecursoNoEncontradoException("Movimiento no encontrado con ID: " + id));
+
+        movimientoRepository.delete(movimiento);
+        entityManager.flush();
     }
 }

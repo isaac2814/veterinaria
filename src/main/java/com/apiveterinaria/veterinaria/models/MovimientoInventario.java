@@ -4,7 +4,7 @@ import com.apiveterinaria.veterinaria.enums.TipoMovimiento;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.Immutable;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -13,8 +13,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "movimientos_inventario")
-@Immutable
 @DynamicInsert
+@DynamicUpdate
 @Getter
 @Setter
 @NoArgsConstructor
@@ -27,30 +27,30 @@ public class MovimientoInventario {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lote_vacuna_id", nullable = false, updatable = false)
+    @JoinColumn(name = "lote_vacuna_id", nullable = false)
     private LoteVacuna lote;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "tipo_movimiento", nullable = false, length = 30, updatable = false)
+    @Column(name = "tipo_movimiento", nullable = false, length = 30)
     private TipoMovimiento tipoMovimiento;
 
-    @Column(name = "cantidad", nullable = false, precision = 10, scale = 2, updatable = false)
+    @Column(name = "cantidad", nullable = false, precision = 10, scale = 2)
     private BigDecimal cantidad;
 
     @Column(name = "fecha_movimiento", insertable = false, updatable = false)
     private OffsetDateTime fechaMovimiento;
 
-    @Column(name = "registro_vacunacion_id", updatable = false)
+    @Column(name = "registro_vacunacion_id")
     private UUID registroVacunacionId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usuario_id", nullable = false, updatable = false)
+    @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
-    @Column(name = "observaciones", updatable = false)
+    @Column(name = "observaciones")
     private String observaciones;
 
-    @Column(name = "id_operacion", length = 100, updatable = false)
+    @Column(name = "id_operacion", length = 100)
     private String idOperacion;
 
     @Column(name = "created_at", insertable = false, updatable = false)

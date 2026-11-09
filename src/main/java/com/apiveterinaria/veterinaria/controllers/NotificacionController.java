@@ -1,5 +1,6 @@
 package com.apiveterinaria.veterinaria.controllers;
 
+import com.apiveterinaria.veterinaria.dto.ActualizarNotificacionRequest;
 import com.apiveterinaria.veterinaria.dto.CrearNotificacionRequest;
 import com.apiveterinaria.veterinaria.dto.MarcarEnviadaRequest;
 import com.apiveterinaria.veterinaria.dto.NotificacionDetalleResponse;
@@ -80,5 +81,25 @@ public class NotificacionController {
             @RequestBody(required = false) MarcarEnviadaRequest request
     ) {
         return ResponseEntity.ok(notificacionService.marcarEnviada(id, request));
+    }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Actualizar datos de una notificación")
+    @ApiResponse(responseCode = "200", description = "Notificación actualizada exitosamente")
+    @ApiResponse(responseCode = "404", description = "Notificación no encontrada")
+    public ResponseEntity<NotificacionDetalleResponse> actualizar(
+            @PathVariable UUID id,
+            @RequestBody ActualizarNotificacionRequest request
+    ) {
+        return ResponseEntity.ok(notificacionService.actualizar(id, request));
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar una notificación")
+    @ApiResponse(responseCode = "204", description = "Notificación eliminada exitosamente")
+    @ApiResponse(responseCode = "404", description = "Notificación no encontrada")
+    public ResponseEntity<Void> eliminar(@PathVariable UUID id) {
+        notificacionService.eliminar(id);
+        return ResponseEntity.noContent().build();
     }
 }

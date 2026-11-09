@@ -1,6 +1,7 @@
 package com.apiveterinaria.veterinaria.services;
 
 import com.apiveterinaria.veterinaria.config.ContextoAuditoria;
+import com.apiveterinaria.veterinaria.dto.ActualizarNotificacionRequest;
 import com.apiveterinaria.veterinaria.dto.CrearNotificacionRequest;
 import com.apiveterinaria.veterinaria.dto.MarcarEnviadaRequest;
 import com.apiveterinaria.veterinaria.dto.NotificacionDetalleResponse;
@@ -119,5 +120,45 @@ public class NotificacionService {
         entityManager.refresh(notificacion);
 
         return NotificacionDetalleResponse.from(notificacion);
+    }
+
+    @Transactional
+    public NotificacionDetalleResponse actualizar(UUID id, ActualizarNotificacionRequest request) {
+        contextoAuditoria.aplicar();
+
+        Notificacion notificacion = notificacionRepository.findByIdWithRelaciones(id)
+                .orElseThrow(() -> new RecursoNoEncontradoException("Notificación no encontrada con ID: " + id));
+
+        if (request.mensaje() != null && !request.mensaje().isBlank()) {
+            notificacion.setMensaje(request.mensaje().trim());
+        }
+        if (request.enviarEn() != null) {
+            notificacion.setEnviarEn(request.enviarEn());
+        }
+        if (request.canal() != null) {
+            notificacion.setCanal(request.canal());
+        }
+        if (request.estadoId() != null) {
+            EstadoNotificacion nuevoEstado = estadoNotificacionRepository.findById(request.estadoId())
+                    .orElseThrow(() -> new RecursoNoEncontradoException("Estado de notificación no encontrado con ID: " + request.estadoId()));
+            notificacion.setEstado(nuevoEstado);
+        }
+
+        notificacion = notificacionRepository.save(notificacion);
+        entityManager.flush();
+        entityManager.refresh(notificacion);
+
+        return NotificacionDetalleResponse.from(notificacion);
+    }
+
+    @Transactional
+    public void eliminar(UUID id) {
+        contextoAuditoria.aplicar();
+
+        Notificacion notificacion = notificacionRepository.findById(id)
+                .orElseThrow(() -> new RecursoNoEncontradoException("Notificación no encontrada con ID: " + id));
+
+        notificacionRepository.delete(notificacion);
+        entityManager.flush();
     }
 }

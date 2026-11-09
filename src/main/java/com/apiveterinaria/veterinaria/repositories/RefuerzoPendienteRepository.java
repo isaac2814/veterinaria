@@ -24,4 +24,7 @@ public interface RefuerzoPendienteRepository extends Repository<RefuerzoPendient
             @Param("soloAtrasados") Boolean soloAtrasados,
             Pageable pageable
     );
+
+    @Query("SELECT r FROM RefuerzoPendiente r WHERE r.registroVacunacionId = :id")
+    java.util.Optional<RefuerzoPendiente> findById(@Param("id") UUID id);
 }

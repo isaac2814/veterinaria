@@ -138,4 +138,15 @@ public class UsuarioService {
         usuarioRepository.save(usuario);
         entityManager.flush();
     }
+
+    @Transactional
+    public void eliminar(UUID id) {
+        contextoAuditoria.aplicar();
+
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RecursoNoEncontradoException("Usuario no encontrado con ID: " + id));
+
+        usuarioRepository.delete(usuario);
+        entityManager.flush();
+    }
 }

@@ -13,9 +13,15 @@ public interface EspecieRepository extends JpaRepository<Especie, UUID> {
 
     Optional<Especie> findByCodigo(String codigo);
 
+    Optional<Especie> findByNombreIgnoreCase(String nombre);
+
     List<Especie> findAllByOrderByNombreAsc();
 
     boolean existsByNombreIgnoreCase(String nombre);
 
     boolean existsByCodigoIgnoreCase(String codigo);
+
+    boolean existsByNombreIgnoreCaseAndIdNot(String nombre, UUID id);
+
+    boolean existsByCodigoIgnoreCaseAndIdNot(String codigo, UUID id);
 }

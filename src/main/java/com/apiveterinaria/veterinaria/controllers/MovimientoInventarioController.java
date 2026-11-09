@@ -1,5 +1,6 @@
 package com.apiveterinaria.veterinaria.controllers;
 
+import com.apiveterinaria.veterinaria.dto.ActualizarMovimientoRequest;
 import com.apiveterinaria.veterinaria.dto.CrearMovimientoRequest;
 import com.apiveterinaria.veterinaria.dto.MovimientoResponse;
 import com.apiveterinaria.veterinaria.enums.TipoMovimiento;
@@ -8,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -70,5 +72,25 @@ public class MovimientoInventarioController {
                 .buildAndExpand(response.id())
                 .toUri();
         return ResponseEntity.created(location).body(response);
+    }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Actualizar observaciones de un movimiento de inventario")
+    @ApiResponse(responseCode = "200", description = "Observaciones del movimiento actualizadas")
+    @ApiResponse(responseCode = "404", description = "Movimiento no encontrado")
+    public ResponseEntity<MovimientoResponse> actualizar(
+            @PathVariable UUID id,
+            @Valid @RequestBody ActualizarMovimientoRequest request
+    ) {
+        return ResponseEntity.ok(movimientoService.actualizar(id, request));
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar un movimiento de inventario")
+    @ApiResponse(responseCode = "204", description = "Movimiento eliminado exitosamente")
+    @ApiResponse(responseCode = "404", description = "Movimiento no encontrado")
+    public ResponseEntity<Void> eliminar(@PathVariable UUID id) {
+        movimientoService.eliminar(id);
+        return ResponseEntity.noContent().build();
     }
 }

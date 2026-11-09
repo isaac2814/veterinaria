@@ -1,6 +1,8 @@
 package com.apiveterinaria.veterinaria.services;
 
 import com.apiveterinaria.veterinaria.dto.RefuerzoPendienteResponse;
+import com.apiveterinaria.veterinaria.exception.RecursoNoEncontradoException;
+import com.apiveterinaria.veterinaria.models.RefuerzoPendiente;
 import com.apiveterinaria.veterinaria.repositories.RefuerzoPendienteRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,5 +42,12 @@ public class RefuerzoPendienteService {
 
         return refuerzoPendienteRepository.findRefuerzos(diasEfectivos, propietarioId, soloAtrasados, pageableFinal)
                 .map(RefuerzoPendienteResponse::from);
+    }
+
+    @Transactional(readOnly = true)
+    public RefuerzoPendienteResponse obtenerPorId(UUID registroVacunacionId) {
+        RefuerzoPendiente refuerzo = refuerzoPendienteRepository.findById(registroVacunacionId)
+                .orElseThrow(() -> new RecursoNoEncontradoException("Refuerzo no encontrado para el registro de vacunación: " + registroVacunacionId));
+        return RefuerzoPendienteResponse.from(refuerzo);
     }
 }

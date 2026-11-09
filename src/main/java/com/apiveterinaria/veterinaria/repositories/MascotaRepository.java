@@ -40,4 +40,8 @@ public interface MascotaRepository extends JpaRepository<Mascota, UUID> {
                                  @Param("nombre") String nombre,
                                  @Param("estado") EstadoMascota estado,
                                  Pageable pageable);
+
+    boolean existsByRazaId(UUID razaId);
+
+    boolean existsByRazaEspecieId(UUID especieId);
 }

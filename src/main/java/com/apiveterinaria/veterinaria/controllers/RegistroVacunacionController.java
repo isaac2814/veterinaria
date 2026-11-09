@@ -99,4 +99,13 @@ public class RegistroVacunacionController {
     ) {
         return ResponseEntity.ok(registroVacunacionService.anular(id, request));
     }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar un registro de vacunación")
+    @ApiResponse(responseCode = "204", description = "Registro de vacunación eliminado exitosamente")
+    @ApiResponse(responseCode = "404", description = "Registro de vacunación no encontrado")
+    public ResponseEntity<Void> eliminar(@PathVariable UUID id) {
+        registroVacunacionService.eliminar(id);
+        return ResponseEntity.noContent().build();
+    }
 }

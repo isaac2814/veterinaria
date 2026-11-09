@@ -114,4 +114,11 @@ public class LoteVacunaController {
     ) {
         return ResponseEntity.ok(loteService.actualizar(id, request));
     }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar un lote de vacuna")
+    public ResponseEntity<Void> eliminar(@PathVariable UUID id) {
+        loteService.eliminar(id);
+        return ResponseEntity.noContent().build();
+    }
 }

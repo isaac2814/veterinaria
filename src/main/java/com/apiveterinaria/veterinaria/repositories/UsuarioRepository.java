@@ -38,4 +38,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
                                  @Param("activo") Boolean activo,
                                  @Param("q") String q,
                                  Pageable pageable);
+
+    boolean existsByRolId(UUID rolId);
 }

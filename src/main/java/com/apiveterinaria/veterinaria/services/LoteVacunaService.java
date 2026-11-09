@@ -152,4 +152,13 @@ public class LoteVacunaService {
                 .map(l -> LoteResponse.from(l, hoy))
                 .toList();
     }
+
+    @Transactional
+    public void eliminar(UUID id) {
+        contextoAuditoria.aplicar();
+        LoteVacuna lote = loteRepository.findById(id)
+                .orElseThrow(() -> new RecursoNoEncontradoException("Lote no encontrado con ID: " + id));
+        loteRepository.delete(lote);
+        entityManager.flush();
+    }
 }

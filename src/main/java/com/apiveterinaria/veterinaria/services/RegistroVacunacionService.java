@@ -187,4 +187,15 @@ public class RegistroVacunacionService {
 
         return RegistroVacunacionResponse.from(registro);
     }
+
+    @Transactional
+    public void eliminar(UUID id) {
+        contextoAuditoria.aplicar();
+
+        RegistroVacunacion registro = registroVacunacionRepository.findById(id)
+                .orElseThrow(() -> new RecursoNoEncontradoException("Registro de vacunación no encontrado con ID: " + id));
+
+        registroVacunacionRepository.delete(registro);
+        entityManager.flush();
+    }
 }

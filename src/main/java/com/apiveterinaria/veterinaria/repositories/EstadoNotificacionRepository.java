@@ -18,4 +18,8 @@ public interface EstadoNotificacionRepository extends JpaRepository<EstadoNotifi
     boolean existsByNombreIgnoreCase(String nombre);
 
     boolean existsByCodigoIgnoreCase(String codigo);
+
+    boolean existsByNombreIgnoreCaseAndIdNot(String nombre, UUID id);
+
+    boolean existsByCodigoIgnoreCaseAndIdNot(String codigo, UUID id);
 }
