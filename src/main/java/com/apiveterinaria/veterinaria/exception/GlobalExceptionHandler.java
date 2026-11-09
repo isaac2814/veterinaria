@@ -215,6 +215,10 @@ public class GlobalExceptionHandler {
             status = HttpStatus.BAD_REQUEST;
             titulo = "Campo obligatorio faltante";
             detalleFinal = "Uno o más campos obligatorios no fueron proporcionados.";
+        } else if ("22P02".equals(sqlState)) {
+            status = HttpStatus.BAD_REQUEST;
+            titulo = "Formato de identificador o dato inválido";
+            detalleFinal = "Uno o más identificadores proporcionados no tienen un formato válido de UUID.";
         } else {
             log.error("Error de base de datos con SQLState {} en {}", sqlState, request.getRequestURI(), ex);
             status = HttpStatus.INTERNAL_SERVER_ERROR;

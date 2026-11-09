@@ -42,12 +42,15 @@ public class HistorialService {
         OffsetDateTime desdeOffset = desde != null ? desde.atStartOfDay(ZONA_BOGOTA).toOffsetDateTime() : null;
         OffsetDateTime hastaOffset = hasta != null ? hasta.plusDays(1).atStartOfDay(ZONA_BOGOTA).minusNanos(1).toOffsetDateTime() : null;
 
+        String entidadFiltro = (entidad != null && !entidad.isBlank()) ? entidad.trim().toLowerCase() : null;
+        String accionFiltro = (accion != null && !accion.isBlank()) ? accion.trim().toLowerCase() : null;
+
         Pageable pageableValido = PaginacionUtil.validarOrden(pageable, CAMPOS_ORDEN_PERMITIDOS, "fechaEvento");
 
         return registroHistoricoRepository.findConFiltros(
-                entidad,
+                entidadFiltro,
                 entidadId,
-                accion,
+                accionFiltro,
                 desdeOffset,
                 hastaOffset,
                 pageableValido

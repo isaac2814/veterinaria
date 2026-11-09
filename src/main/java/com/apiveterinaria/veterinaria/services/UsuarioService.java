@@ -55,6 +55,9 @@ public class UsuarioService {
                 .orElseThrow(() -> new RecursoNoEncontradoException("Rol no encontrado con ID: " + request.rolId()));
 
         String emailNormalizado = request.email().trim().toLowerCase();
+        if (usuarioRepository.existsByEmailIgnoreCase(emailNormalizado)) {
+            throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.CONFLICT, "El email '" + emailNormalizado + "' ya se encuentra registrado");
+        }
         String passwordHasheada = passwordEncoder.encode(request.password());
 
         Usuario usuario = Usuario.builder()
@@ -75,7 +78,7 @@ public class UsuarioService {
 
     public Page<UsuarioResponse> listar(UUID rolId, Boolean activo, String q, Pageable pageable) {
         Pageable pageableValido = PaginacionUtil.validarOrden(pageable, CAMPOS_ORDEN_PERMITIDOS, "createdAt");
-        String filtroQ = (q != null && !q.isBlank()) ? q.trim() : null;
+        String filtroQ = (q != null && !q.isBlank()) ? "%" + q.trim().toLowerCase() + "%" : null;
 
         return usuarioRepository.buscarUsuarios(rolId, activo, filtroQ, pageableValido)
                 .map(UsuarioResponse::from);

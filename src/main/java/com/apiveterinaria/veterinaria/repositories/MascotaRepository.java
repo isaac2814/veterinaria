@@ -28,12 +28,12 @@ public interface MascotaRepository extends JpaRepository<Mascota, UUID> {
             "JOIN FETCH r.especie e " +
             "WHERE (:propietarioId IS NULL OR p.id = :propietarioId) " +
             "  AND (:especieId IS NULL OR e.id = :especieId) " +
-            "  AND (:nombre IS NULL OR LOWER(m.nombre) LIKE LOWER(CONCAT('%', :nombre, '%'))) " +
+            "  AND (:nombre IS NULL OR LOWER(m.nombre) LIKE :nombre) " +
             "  AND (:estado IS NULL OR m.estado = :estado)",
             countQuery = "SELECT COUNT(m) FROM Mascota m " +
             "WHERE (:propietarioId IS NULL OR m.propietario.id = :propietarioId) " +
             "  AND (:especieId IS NULL OR m.raza.especie.id = :especieId) " +
-            "  AND (:nombre IS NULL OR LOWER(m.nombre) LIKE LOWER(CONCAT('%', :nombre, '%'))) " +
+            "  AND (:nombre IS NULL OR LOWER(m.nombre) LIKE :nombre) " +
             "  AND (:estado IS NULL OR m.estado = :estado)")
     Page<Mascota> buscarMascotas(@Param("propietarioId") UUID propietarioId,
                                  @Param("especieId") UUID especieId,

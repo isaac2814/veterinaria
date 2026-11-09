@@ -20,16 +20,16 @@ public interface PropietarioRepository extends JpaRepository<Propietario, UUID> 
 
     @Query(value = "SELECT p FROM Propietario p WHERE " +
             "(:activo IS NULL OR p.activo = :activo) AND " +
-            "(:q IS NULL OR LOWER(p.documento) LIKE LOWER(CONCAT('%', :q, '%')) " +
-            "             OR LOWER(p.nombres) LIKE LOWER(CONCAT('%', :q, '%')) " +
-            "             OR LOWER(p.apellidos) LIKE LOWER(CONCAT('%', :q, '%')) " +
-            "             OR LOWER(p.telefonoWhatsapp) LIKE LOWER(CONCAT('%', :q, '%')))",
+            "(:q IS NULL OR LOWER(p.documento) LIKE :q " +
+            "             OR LOWER(p.nombres) LIKE :q " +
+            "             OR LOWER(p.apellidos) LIKE :q " +
+            "             OR LOWER(p.telefonoWhatsapp) LIKE :q)",
             countQuery = "SELECT COUNT(p) FROM Propietario p WHERE " +
             "(:activo IS NULL OR p.activo = :activo) AND " +
-            "(:q IS NULL OR LOWER(p.documento) LIKE LOWER(CONCAT('%', :q, '%')) " +
-            "             OR LOWER(p.nombres) LIKE LOWER(CONCAT('%', :q, '%')) " +
-            "             OR LOWER(p.apellidos) LIKE LOWER(CONCAT('%', :q, '%')) " +
-            "             OR LOWER(p.telefonoWhatsapp) LIKE LOWER(CONCAT('%', :q, '%')))")
+            "(:q IS NULL OR LOWER(p.documento) LIKE :q " +
+            "             OR LOWER(p.nombres) LIKE :q " +
+            "             OR LOWER(p.apellidos) LIKE :q " +
+            "             OR LOWER(p.telefonoWhatsapp) LIKE :q)")
     Page<Propietario> buscarPropietarios(@Param("activo") Boolean activo,
                                          @Param("q") String q,
                                          Pageable pageable);

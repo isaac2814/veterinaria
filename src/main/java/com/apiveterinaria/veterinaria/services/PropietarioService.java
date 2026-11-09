@@ -43,6 +43,11 @@ public class PropietarioService {
     public PropietarioResponse crear(CrearPropietarioRequest request) {
         contextoAuditoria.aplicar();
 
+        String doc = request.documento().trim();
+        if (propietarioRepository.existsByDocumento(doc)) {
+            throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.CONFLICT, "El documento '" + doc + "' ya se encuentra registrado");
+        }
+
         Propietario propietario = Propietario.builder()
                 .tipoDocumento(request.tipoDocumento())
                 .documento(request.documento().trim())
@@ -65,7 +70,7 @@ public class PropietarioService {
 
     public Page<PropietarioResponse> listar(Boolean activo, String q, Pageable pageable) {
         Pageable pageableValido = PaginacionUtil.validarOrden(pageable, CAMPOS_ORDEN_PERMITIDOS, "createdAt");
-        String filtroQ = (q != null && !q.isBlank()) ? q.trim() : null;
+        String filtroQ = (q != null && !q.isBlank()) ? "%" + q.trim().toLowerCase() + "%" : null;
 
         return propietarioRepository.buscarPropietarios(activo, filtroQ, pageableValido)
                 .map(PropietarioResponse::from);

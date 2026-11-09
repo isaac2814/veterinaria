@@ -19,12 +19,12 @@ public interface VacunaRepository extends JpaRepository<Vacuna, UUID> {
     boolean existsByCodigoIgnoreCase(String codigo);
 
     @Query(value = "SELECT v FROM Vacuna v WHERE " +
-            "(:q IS NULL OR LOWER(v.codigo) LIKE LOWER(CONCAT('%', :q, '%')) " +
-            "             OR LOWER(v.nombre) LIKE LOWER(CONCAT('%', :q, '%')) " +
-            "             OR LOWER(v.fabricante) LIKE LOWER(CONCAT('%', :q, '%')))",
+            "(:q IS NULL OR LOWER(v.codigo) LIKE :q " +
+            "             OR LOWER(v.nombre) LIKE :q " +
+            "             OR LOWER(v.fabricante) LIKE :q)",
             countQuery = "SELECT COUNT(v) FROM Vacuna v WHERE " +
-            "(:q IS NULL OR LOWER(v.codigo) LIKE LOWER(CONCAT('%', :q, '%')) " +
-            "             OR LOWER(v.nombre) LIKE LOWER(CONCAT('%', :q, '%')) " +
-            "             OR LOWER(v.fabricante) LIKE LOWER(CONCAT('%', :q, '%')))")
+            "(:q IS NULL OR LOWER(v.codigo) LIKE :q " +
+            "             OR LOWER(v.nombre) LIKE :q " +
+            "             OR LOWER(v.fabricante) LIKE :q)")
     Page<Vacuna> buscarVacunas(@Param("q") String q, Pageable pageable);
 }

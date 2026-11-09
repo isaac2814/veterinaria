@@ -88,7 +88,7 @@ public class MascotaService {
 
     public Page<MascotaResponse> listar(UUID propietarioId, UUID especieId, String nombre, EstadoMascota estado, Pageable pageable) {
         Pageable pageableValido = PaginacionUtil.validarOrden(pageable, CAMPOS_ORDEN_PERMITIDOS, "createdAt");
-        String filtroNombre = (nombre != null && !nombre.isBlank()) ? nombre.trim() : null;
+        String filtroNombre = (nombre != null && !nombre.isBlank()) ? "%" + nombre.trim().toLowerCase() + "%" : null;
 
         return mascotaRepository.buscarMascotas(propietarioId, especieId, filtroNombre, estado, pageableValido)
                 .map(MascotaResponse::from);

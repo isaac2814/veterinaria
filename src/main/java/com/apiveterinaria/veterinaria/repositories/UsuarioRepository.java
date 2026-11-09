@@ -25,15 +25,15 @@ public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
     @Query(value = "SELECT u FROM Usuario u JOIN FETCH u.rol r WHERE " +
             "(:rolId IS NULL OR r.id = :rolId) AND " +
             "(:activo IS NULL OR u.activo = :activo) AND " +
-            "(:q IS NULL OR LOWER(u.nombre) LIKE LOWER(CONCAT('%', :q, '%')) " +
-            "             OR LOWER(u.apellidos) LIKE LOWER(CONCAT('%', :q, '%')) " +
-            "             OR LOWER(u.email) LIKE LOWER(CONCAT('%', :q, '%')))",
+            "(:q IS NULL OR LOWER(u.nombre) LIKE :q " +
+            "             OR LOWER(u.apellidos) LIKE :q " +
+            "             OR LOWER(u.email) LIKE :q)",
             countQuery = "SELECT COUNT(u) FROM Usuario u WHERE " +
             "(:rolId IS NULL OR u.rol.id = :rolId) AND " +
             "(:activo IS NULL OR u.activo = :activo) AND " +
-            "(:q IS NULL OR LOWER(u.nombre) LIKE LOWER(CONCAT('%', :q, '%')) " +
-            "             OR LOWER(u.apellidos) LIKE LOWER(CONCAT('%', :q, '%')) " +
-            "             OR LOWER(u.email) LIKE LOWER(CONCAT('%', :q, '%')))")
+            "(:q IS NULL OR LOWER(u.nombre) LIKE :q " +
+            "             OR LOWER(u.apellidos) LIKE :q " +
+            "             OR LOWER(u.email) LIKE :q)")
     Page<Usuario> buscarUsuarios(@Param("rolId") UUID rolId,
                                  @Param("activo") Boolean activo,
                                  @Param("q") String q,

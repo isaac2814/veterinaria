@@ -19,9 +19,9 @@ public interface RegistroHistoricoRepository extends JpaRepository<RegistroHisto
     @EntityGraph(attributePaths = {"usuarioActor"})
     @Query("""
         SELECT h FROM RegistroHistorico h
-        WHERE (:entidad IS NULL OR LOWER(h.entidad) = LOWER(:entidad))
+        WHERE (:entidad IS NULL OR LOWER(h.entidad) = :entidad)
           AND (:entidadId IS NULL OR h.entidadId = :entidadId)
-          AND (:accion IS NULL OR LOWER(h.accion) = LOWER(:accion))
+          AND (:accion IS NULL OR LOWER(h.accion) = :accion)
           AND (:desde IS NULL OR h.fechaEvento >= :desde)
           AND (:hasta IS NULL OR h.fechaEvento <= :hasta)
     """)

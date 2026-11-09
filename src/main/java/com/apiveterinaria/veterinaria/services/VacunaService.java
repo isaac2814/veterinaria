@@ -43,6 +43,9 @@ public class VacunaService {
         contextoAuditoria.aplicar();
 
         String codigoNormalizado = request.codigo().trim().toUpperCase();
+        if (vacunaRepository.existsByCodigoIgnoreCase(codigoNormalizado)) {
+            throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.CONFLICT, "El código de vacuna '" + codigoNormalizado + "' ya se encuentra registrado");
+        }
 
         Vacuna vacuna = Vacuna.builder()
                 .codigo(codigoNormalizado)
@@ -60,7 +63,7 @@ public class VacunaService {
 
     public Page<VacunaResponse> listar(String q, Pageable pageable) {
         Pageable pageableValido = PaginacionUtil.validarOrden(pageable, CAMPOS_ORDEN_PERMITIDOS, "nombre");
-        String filtroQ = (q != null && !q.isBlank()) ? q.trim() : null;
+        String filtroQ = (q != null && !q.isBlank()) ? "%" + q.trim().toLowerCase() + "%" : null;
 
         return vacunaRepository.buscarVacunas(filtroQ, pageableValido)
                 .map(VacunaResponse::from);
