@@ -28,6 +28,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Set;
 import java.util.UUID;
 
@@ -35,6 +36,8 @@ import java.util.UUID;
 public class MovimientoInventarioService {
 
     private static final ZoneId ZONA_BOGOTA = ZoneId.of("America/Bogota");
+    private static final OffsetDateTime FECHA_MINIMA = OffsetDateTime.of(1970, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
+    private static final OffsetDateTime FECHA_MAXIMA = OffsetDateTime.of(2099, 12, 31, 23, 59, 59, 0, ZoneOffset.UTC);
     private static final Set<String> CAMPOS_ORDEN_PERMITIDOS = Set.of(
             "fechaMovimiento", "cantidad", "createdAt"
     );
@@ -125,8 +128,8 @@ public class MovimientoInventarioService {
     public Page<MovimientoResponse> listar(UUID loteId, TipoMovimiento tipo, LocalDate desde, LocalDate hasta, Pageable pageable) {
         Pageable ordenado = PaginacionUtil.validarOrden(pageable, CAMPOS_ORDEN_PERMITIDOS, "fechaMovimiento");
 
-        OffsetDateTime desdeOffset = desde != null ? desde.atStartOfDay(ZONA_BOGOTA).toOffsetDateTime() : null;
-        OffsetDateTime hastaOffset = hasta != null ? hasta.atTime(LocalTime.MAX).atZone(ZONA_BOGOTA).toOffsetDateTime() : null;
+        OffsetDateTime desdeOffset = desde != null ? desde.atStartOfDay(ZONA_BOGOTA).toOffsetDateTime() : FECHA_MINIMA;
+        OffsetDateTime hastaOffset = hasta != null ? hasta.atTime(LocalTime.MAX).atZone(ZONA_BOGOTA).toOffsetDateTime() : FECHA_MAXIMA;
 
         return movimientoRepository.findConFiltros(loteId, tipo, desdeOffset, hastaOffset, ordenado)
                 .map(MovimientoResponse::from);

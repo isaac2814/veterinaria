@@ -35,10 +35,10 @@ public interface MovimientoInventarioRepository extends JpaRepository<Movimiento
     @EntityGraph(attributePaths = {"lote", "lote.vacuna", "usuario"})
     @Query("""
         SELECT m FROM MovimientoInventario m
-        WHERE (:loteId IS NULL OR m.lote.id = :loteId)
+        WHERE (CAST(:loteId AS uuid) IS NULL OR m.lote.id = :loteId)
           AND (:tipo IS NULL OR m.tipoMovimiento = :tipo)
-          AND (:desde IS NULL OR m.fechaMovimiento >= :desde)
-          AND (:hasta IS NULL OR m.fechaMovimiento <= :hasta)
+          AND m.fechaMovimiento >= :desde
+          AND m.fechaMovimiento <= :hasta
     """)
     Page<MovimientoInventario> findConFiltros(
             @Param("loteId") UUID loteId,

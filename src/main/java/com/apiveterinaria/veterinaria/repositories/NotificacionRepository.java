@@ -28,8 +28,8 @@ public interface NotificacionRepository extends JpaRepository<Notificacion, UUID
     @EntityGraph(attributePaths = {"registroVacunacion", "estado"})
     @Query("""
         SELECT n FROM Notificacion n
-        WHERE (:registroVacunacionId IS NULL OR n.registroVacunacion.id = :registroVacunacionId)
-          AND (:estadoId IS NULL OR n.estado.id = :estadoId)
+        WHERE (CAST(:registroVacunacionId AS uuid) IS NULL OR n.registroVacunacion.id = :registroVacunacionId)
+          AND (CAST(:estadoId AS uuid) IS NULL OR n.estado.id = :estadoId)
           AND (:canal IS NULL OR n.canal = :canal)
     """)
     Page<Notificacion> findConFiltros(

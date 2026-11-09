@@ -23,13 +23,13 @@ public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
     Optional<Usuario> findWithRolById(UUID id);
 
     @Query(value = "SELECT u FROM Usuario u JOIN FETCH u.rol r WHERE " +
-            "(:rolId IS NULL OR r.id = :rolId) AND " +
+            "(CAST(:rolId AS uuid) IS NULL OR r.id = :rolId) AND " +
             "(:activo IS NULL OR u.activo = :activo) AND " +
             "(:q IS NULL OR LOWER(u.nombre) LIKE :q " +
             "             OR LOWER(u.apellidos) LIKE :q " +
             "             OR LOWER(u.email) LIKE :q)",
             countQuery = "SELECT COUNT(u) FROM Usuario u WHERE " +
-            "(:rolId IS NULL OR u.rol.id = :rolId) AND " +
+            "(CAST(:rolId AS uuid) IS NULL OR u.rol.id = :rolId) AND " +
             "(:activo IS NULL OR u.activo = :activo) AND " +
             "(:q IS NULL OR LOWER(u.nombre) LIKE :q " +
             "             OR LOWER(u.apellidos) LIKE :q " +

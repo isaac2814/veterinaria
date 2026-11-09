@@ -28,7 +28,7 @@ public interface LoteVacunaRepository extends JpaRepository<LoteVacuna, UUID> {
     @EntityGraph(attributePaths = {"vacuna", "registradoPor"})
     @Query("""
         SELECT l FROM LoteVacuna l
-        WHERE (:vacunaId IS NULL OR l.vacuna.id = :vacunaId)
+        WHERE (CAST(:vacunaId AS uuid) IS NULL OR l.vacuna.id = :vacunaId)
           AND (:soloConStock IS NULL OR :soloConStock = false OR l.cantidadDisponible > 0)
           AND (:vencidos IS NULL OR (:vencidos = true AND l.fechaVencimiento < :hoy) OR (:vencidos = false AND l.fechaVencimiento >= :hoy))
     """)

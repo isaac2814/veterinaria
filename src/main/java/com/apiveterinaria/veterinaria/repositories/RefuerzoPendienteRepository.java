@@ -14,7 +14,7 @@ public interface RefuerzoPendienteRepository extends Repository<RefuerzoPendient
 
     @Query("""
         SELECT r FROM RefuerzoPendiente r
-        WHERE (:propietarioId IS NULL OR r.propietarioId = :propietarioId)
+        WHERE (CAST(:propietarioId AS uuid) IS NULL OR r.propietarioId = :propietarioId)
           AND (:soloAtrasados = true AND r.diasRestantes < 0
                OR (:soloAtrasados IS NULL OR :soloAtrasados = false) AND (:dias IS NULL OR r.diasRestantes <= :dias))
     """)

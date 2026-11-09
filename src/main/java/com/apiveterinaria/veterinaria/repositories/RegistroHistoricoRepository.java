@@ -20,10 +20,10 @@ public interface RegistroHistoricoRepository extends JpaRepository<RegistroHisto
     @Query("""
         SELECT h FROM RegistroHistorico h
         WHERE (:entidad IS NULL OR LOWER(h.entidad) = :entidad)
-          AND (:entidadId IS NULL OR h.entidadId = :entidadId)
+          AND (CAST(:entidadId AS uuid) IS NULL OR h.entidadId = :entidadId)
           AND (:accion IS NULL OR LOWER(h.accion) = :accion)
-          AND (:desde IS NULL OR h.fechaEvento >= :desde)
-          AND (:hasta IS NULL OR h.fechaEvento <= :hasta)
+          AND h.fechaEvento >= :desde
+          AND h.fechaEvento <= :hasta
     """)
     Page<RegistroHistorico> findConFiltros(
             @Param("entidad") String entidad,

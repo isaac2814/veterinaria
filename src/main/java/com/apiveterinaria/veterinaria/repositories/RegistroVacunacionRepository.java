@@ -54,13 +54,13 @@ public interface RegistroVacunacionRepository extends JpaRepository<RegistroVacu
     })
     @Query("""
         SELECT r FROM RegistroVacunacion r
-        WHERE (:mascotaId IS NULL OR r.mascota.id = :mascotaId)
-          AND (:vacunaId IS NULL OR r.loteVacuna.vacuna.id = :vacunaId)
-          AND (:veterinarioId IS NULL OR r.veterinario.id = :veterinarioId)
+        WHERE (CAST(:mascotaId AS uuid) IS NULL OR r.mascota.id = :mascotaId)
+          AND (CAST(:vacunaId AS uuid) IS NULL OR r.loteVacuna.vacuna.id = :vacunaId)
+          AND (CAST(:veterinarioId AS uuid) IS NULL OR r.veterinario.id = :veterinarioId)
           AND (:estado IS NULL OR r.estadoRegistro = :estado)
           AND (:estadoRefuerzo IS NULL OR r.estadoRefuerzo = :estadoRefuerzo)
-          AND (:desde IS NULL OR r.fechaAplicacion >= :desde)
-          AND (:hasta IS NULL OR r.fechaAplicacion <= :hasta)
+          AND (CAST(:desde AS date) IS NULL OR r.fechaAplicacion >= :desde)
+          AND (CAST(:hasta AS date) IS NULL OR r.fechaAplicacion <= :hasta)
     """)
     Page<RegistroVacunacion> findConFiltros(
             @Param("mascotaId") UUID mascotaId,
